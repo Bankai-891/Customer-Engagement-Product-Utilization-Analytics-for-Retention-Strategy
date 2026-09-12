@@ -87,8 +87,6 @@ The project uses a European bank customer churn dataset containing customer-leve
 ### Target Variable
 
 `Exited`
-![Salary Balance Analysis](images/salary_balance_mismatch.png)
 
-```text
 0 → Customer retained
 1 → Customer churned
