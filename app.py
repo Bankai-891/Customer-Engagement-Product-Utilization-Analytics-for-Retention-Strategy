@@ -226,7 +226,7 @@ if module == "Engagement vs Churn":
     with col3:
         st.markdown(f"""
         <div class="kpi-card">
-            <div class="kpi-title">"High Engagement Churn"</div>
+            <div class="kpi-title">High Engagement Churn</div>
             <div class="kpi-value">{threshold['High Engagement']:.1f}%</div>
         </div>
 
