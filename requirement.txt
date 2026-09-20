@@ -1,0 +1,6 @@
+streamlit
+matplotlib
+pandas
+numpy
+base64
+# (add all packages your app imports)
