@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import base64
 
 
+
 # --------------------------------------------------
 # PAGE CONFIGURATION
 # --------------------------------------------------
@@ -12,6 +13,8 @@ st.set_page_config(
     page_title="Bank Customer Churn Analytics",
     page_icon="🏦",
     layout="wide"
+    
+
 )
 
 
@@ -19,8 +22,51 @@ st.set_page_config(
 # TITLE
 # --------------------------------------------------
 
-st.title("🏦 Bank Customer Churn Analytics")
+# st.title("🏦 Bank Customer Churn Analytics")
+st.markdown("""
+<div style="
+    border: 1px solid #00ADB5;
+    padding: 12px 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.35);
+    color: white;
+">
+    🏦 Bank Customer Churn Analytics
+</div>
+""", unsafe_allow_html=True)
+
 st.write("Interactive analysis of customer engagement | product utilization | and high-value disengaged customers.")
+
+
+def set_background(image_file):
+    with open(image_file, "rb") as file:
+        encoded = base64.b64encode(file.read()).decode()
+
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.85),
+                    rgba(0, 0, 0, 0.85)
+                ),
+                url("data:image/jpg;base64,{encoded}");
+
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+set_background("image.jpg")
 
 
 # --------------------------------------------------
@@ -78,7 +124,24 @@ data["Engagement_Tier"] = data["Engagement_Score"].map({
 
 if module == "Engagement vs Churn":
 
-    st.header("📊 Engagement vs Churn")
+    # st.header("📊 Engagement vs Churn")
+    st.markdown("""
+<div style="
+        border: 2px solid #444;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.15);
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 28px;
+        font-weight: bold;
+">
+    📊 Engagement vs Churn
+</div>
+""", unsafe_allow_html=True)
 
     # Create engagement score
     data["Engagement_Score"] = (
@@ -107,33 +170,81 @@ if module == "Engagement vs Churn":
     ]
 
     threshold = threshold.reindex(order)
-
+    
     # KPI cards
+    st.markdown("""
+    <style>
+
+    .kpi-card {
+        border: 2px solid #444;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.15);
+        margin-bottom: 20px;
+    }
+
+    .kpi-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .kpi-value {
+        font-size: 28px;
+        font-weight: bold;
+    }
+    .kpi-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0px 0px 20px rgba(243,240,240, 0.7);
+            }
+
+    </style>
+    """, unsafe_allow_html=True)
+
+
     col1, col2, col3 = st.columns(3)
 
-    col1.metric(
-        "Low Engagement Churn",
-        f"{threshold['Low Engagement']:.1f}%"
-    )
+    with col1:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-title">Low Engagement Churn</div>
+            <div class="kpi-value">{threshold['Low Engagement']:.1f}%</div>
+        </div>
+        """, unsafe_allow_html=True)
 
-    col2.metric(
-        "Medium Engagement Churn",
-        f"{threshold['Medium Engagement']:.1f}%"
-    )
 
-    col3.metric(
-        "High Engagement Churn",
-        f"{threshold['High Engagement']:.1f}%"
-    )
+    with col2:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-title">Medium Engagement Churn</div>
+            <div class="kpi-value">{threshold['Medium Engagement']:.1f}%</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+
+    with col3:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-title">"High Engagement Churn"</div>
+            <div class="kpi-value">{threshold['High Engagement']:.1f}%</div>
+        </div>
+
+        """, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3)
+
+   
 
     # Chart
     st.subheader("Churn Rate by Engagement Level")
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(9, 6))
 
     ax.bar(
         threshold.index,
-        threshold.values
+        threshold.values,
+        color="Orange"
     )
 
     ax.set_ylabel("Churn Rate (%)")
@@ -141,8 +252,9 @@ if module == "Engagement vs Churn":
     ax.set_title("Engagement vs Churn")
 
     plt.xticks(rotation=15)
+    plt.tight_layout()
 
-    st.pyplot(fig)
+    st.pyplot(fig, width=900)
 
     # Threshold comparison
     low = threshold["Low Engagement"]
@@ -172,7 +284,23 @@ if module == "Engagement vs Churn":
 
 elif module == "Product Utilization Impact":
 
-    st.header("📦 Product Utilization Impact Analysis")
+    st.markdown("""
+    <div style="
+            border: 2px solid #444;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.15);
+            margin-bottom: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 28px;
+            font-weight: bold;
+    ">
+        📦 Product Utilization Impact Analysis
+    </div>
+    """, unsafe_allow_html=True)
 
     # Churn by number of products
     product_result = (
@@ -193,10 +321,47 @@ elif module == "Product Utilization Impact":
     )
 
     # KPI
-    st.metric(
-        "Number of Product Categories",
-        len(product_result)
-    )
+    st.markdown("""
+        <style>
+    
+        .kpi-card {
+            border: 2px solid #444;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.15);
+            margin-bottom: 20px;
+            in
+        }
+    
+        .kpi-title {
+            font-size: 16px;
+            font-weight: 60;
+            margin-bottom: 10px;
+        }
+    
+        .kpi-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .kpi-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 0px 20px rgba(243,240,240, 0.7);
+        }
+    
+        </style>
+        """, unsafe_allow_html=True)
+    st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-title">"Number of Product Categories"</div>
+                <div class="kpi-value">{len(product_result)}</div>
+            </div>
+    
+            """, unsafe_allow_html=True)
+    # st.metric(
+    #     "Number of Product Categories",
+    #     len(product_result)
+    # )
 
     # Table
     st.subheader("Product Utilization Summary")
@@ -209,7 +374,7 @@ elif module == "Product Utilization Impact":
     # Chart
     st.subheader("Churn Rate by Number of Products")
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(7, 4))
 
     ax.bar(
         product_result["Number of Products"],
@@ -220,7 +385,7 @@ elif module == "Product Utilization Impact":
     ax.set_ylabel("Churn Rate (%)")
     ax.set_title("Product Utilization vs Churn")
 
-    st.pyplot(fig)
+    st.pyplot(fig,width =700)
 
     # Find lowest and highest churn
     lowest = product_result.loc[
@@ -252,7 +417,24 @@ elif module == "Product Utilization Impact":
 
 elif module == "High-Value Disengaged Customers":
 
-    st.header("🚨 High-Value Disengaged Customer Detector")
+    st.markdown("""
+        <div style="
+        border: 2px solid #444;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.15);
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 28px;
+        font-weight: bold;
+">
+    🚨 High-Value Disengaged Customer Detector
+</div>
+""", unsafe_allow_html=True)
+    
 
     # Median thresholds
     median_balance = data["Balance"].median()
@@ -267,26 +449,91 @@ elif module == "High-Value Disengaged Customers":
     ].copy()
 
     # KPIs
+    st.markdown("""
+        <style>
+    
+        .kpi-card {
+            border: 2px solid #444;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.15);
+            margin-bottom: 20px;
+        }
+    
+        .kpi-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+    
+        .kpi-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .kpi-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0px 0px 20px rgba(243,240,240, 0.7);
+                }
+    
+        </style>
+        """, unsafe_allow_html=True)
     col1, col2, col3 = st.columns(3)
 
-    col1.metric(
-        "High-Value Disengaged",
-        len(high_value)
-    )
+    with col1:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-title">High-Value Disengaged</div>
+            <div class="kpi-value">
+            {len(high_value)}
+            </div>
 
-    col2.metric(
-        "Average Balance",
-        f"₹{high_value['Balance'].mean():,.0f}"
-        if len(high_value) > 0
-        else "₹0"
-    )
+        </div>
+        """, unsafe_allow_html=True)
 
-    col3.metric(
-        "Churn Rate",
-        f"{high_value['Exited'].mean() * 100:.1f}%"
-        if len(high_value) > 0
-        else "0%"
-    )
+
+    with col2:
+        st.markdown(f"""
+        <div class="kpi-card">
+            <div class="kpi-title">Average Balance</div>
+            <div class="kpi-value">{f"₹{high_value['Balance'].mean():,.0f}"
+                    if len(high_value) > 0
+                    else "₹0"}</div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+    with col3:
+            st.markdown(f"""
+            <div class="kpi-card">
+                <div class="kpi-title">Churn Rate</div>
+                <div class="kpi-value">{f"{high_value['Exited'].mean() * 100:.1f}%"
+                        if len(high_value) > 0
+                        else "0%"}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    
+    
+    col1, col2, col3 = st.columns(3)
+
+    # col1.metric(
+    #     "High-Value Disengaged",
+    #     len(high_value)
+    # )
+
+    # col2.metric(
+    #     "Average Balance",
+    #     f"₹{high_value['Balance'].mean():,.0f}"
+    #     if len(high_value) > 0
+    #     else "₹0"
+    # )
+
+    # col3.metric(
+    #     "Churn Rate",
+    #     f"{high_value['Exited'].mean() * 100:.1f}%"
+    #     if len(high_value) > 0
+    #     else "0%"
+    # )
 
     # Customer table
     st.subheader("Detected Customers")
@@ -566,40 +813,115 @@ relationship_strength_index = (
 
 st.subheader("📊 Key Performance Indicators")
 
+st.markdown("""
+<style>
+
+.kpi-card {
+    border: 2px solid #444;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.15);
+    margin-bottom: 20px;
+}
+
+.kpi-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.kpi-value {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric(
-        "Engagement Retention Ratio",
-        f"{engagement_retention_ratio:.2f}×"
-    )
+    st.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-title">Engagement Retention Ratio</div>
+        <div class="kpi-value">{engagement_retention_ratio:.2f}×</div>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 with col2:
-    st.metric(
-        "Product Depth Index",
-        f"{product_depth_index:.2f}"
-    )
+    st.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-title">Product Depth Index</div>
+        <div class="kpi-value">{product_depth_index:.2f}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 with col3:
-    st.metric(
-        "High-Balance Disengagement",
-        f"{high_balance_disengagement_rate:.1f}%"
-    )
+    st.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-title">High-Balance Disengagement</div>
+        <div class="kpi-value">{high_balance_disengagement_rate:.1f}%</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 col4, col5 = st.columns(2)
 
 with col4:
-    st.metric(
-        "Credit Card Stickiness",
-        f"{credit_card_stickiness:.1f}%"
-    )
+    st.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-title">Credit Card Stickiness</div>
+        <div class="kpi-value">{credit_card_stickiness:.1f}%</div>
+    </div>
+    """, unsafe_allow_html=True)
+
 
 with col5:
-    st.metric(
-        "Relationship Strength Index",
-        f"{relationship_strength_index:.2f} / 2"
-    )
+    st.markdown(f"""
+    <div class="kpi-card">
+        <div class="kpi-title">Relationship Strength Index</div>
+        <div class="kpi-value">{relationship_strength_index:.2f} / 2</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+col1, col2, col3 = st.columns(3)
+
+# with col1:
+#     st.metric(
+#         "Engagement Retention Ratio",
+#         f"{engagement_retention_ratio:.2f}×"
+#     )
+
+# with col2:
+#     st.metric(
+#         "Product Depth Index",
+#         f"{product_depth_index:.2f}"
+#     )
+
+# with col3:
+#     st.metric(
+#         "High-Balance Disengagement",
+#         f"{high_balance_disengagement_rate:.1f}%"
+#     )
+
+
+# col4, col5 = st.columns(2)
+
+# with col4:
+#     st.metric(
+#         "Credit Card Stickiness",
+#         f"{credit_card_stickiness:.1f}%"
+#     )
+
+# with col5:
+#     st.metric(
+#         "Relationship Strength Index",
+#         f"{relationship_strength_index:.2f} / 2"
+#     )
 
 
 
