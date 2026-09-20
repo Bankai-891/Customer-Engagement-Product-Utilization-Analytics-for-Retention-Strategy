@@ -3,4 +3,4 @@ matplotlib
 pandas
 numpy
 base64
-# (add all packages your app imports)
+pip freeze > requirements.txt
